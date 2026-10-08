@@ -1,0 +1,10 @@
+# Python 缓存（不需要进仓库）
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# 测试原始产物（每次跑都变，不进仓库；报告 HTML 作为样例保留）
+报告/junit.xml
+
+# 编辑器配置
+.idea/

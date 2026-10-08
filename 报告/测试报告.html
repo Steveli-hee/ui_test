@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>自动化测试报告</title>
+<style>
+  body { font-family: "Microsoft YaHei", sans-serif; max-width: 1100px; margin: 0 auto; padding: 20px; color: #222; }
+  h1 { font-size: 22px; }
+  .meta { color: #666; font-size: 13px; margin-bottom: 14px; }
+  .cards { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+  .card { border: 1px solid #ddd; border-radius: 8px; padding: 8px 16px; text-align: center; font-size: 12px; color: #555; }
+  .card b { font-size: 20px; display: block; color: #111; }
+  .card.pass b { color: #0a7d28; }
+  .card.fail b { color: #b91c1c; }
+  .card.warn b { color: #b45309; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { border: 1px solid #ddd; padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: #f3f4f6; }
+  pre { background: #f8f8f8; padding: 8px; overflow-x: auto; white-space: pre-wrap; }
+  details summary { cursor: pointer; color: #1a56db; }
+</style>
+</head>
+<body>
+<h1>迷你商城 · 自动化测试报告</h1>
+<div class="meta">生成时间：2026-09-27 13:22:20 ｜ 数据来源：junit.xml ｜ 被测系统：迷你商城 (127.0.0.1:5001)</div>
+<div class="cards"><div class="card">用例总数<br><b>12</b></div><div class="card pass">通过<br><b>11</b></div><div class="card fail">失败<br><b>1</b></div><div class="card warn">错误<br><b>0</b></div><div class="card">跳过<br><b>0</b></div><div class="card">总耗时<br><b>10.1s</b></div></div>
+<table>
+  <tr><th>用例</th><th>结果</th><th>耗时</th><th>详情</th></tr>
+  <tr><td>UI_test::test_首页标题正确</td><td style="color:#0a7d28;font-weight:bold">通过</td><td>0.72s</td><td></td></tr><tr><td>UI_test::test_未登录点击购物车应跳转登录页</td><td style="color:#0a7d28;font-weight:bold">通过</td><td>0.71s</td><td></td></tr><tr><td>UI_test::test_注册成功后应自动登录进首页</td><td style="color:#b91c1c;font-weight:bold">失败</td><td>0.78s</td><td><details><summary>查看详情</summary><pre>AssertionError: assert &#x27;http://127.0.0.1:5001/login&#x27; == &#x27;http://127.0.0.1:5001/&#x27;
+  
+  #x1B[0m#x1B[91m- http://127.0.0.1:5001/#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+  #x1B[92m+ http://127.0.0.1:5001/login#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+  ?                       +++++#x1B[90m#x1B[39;49;00m
+page = &lt;Page url=&#x27;http://127.0.0.1:5001/login&#x27;&gt;
+
+    def test_注册成功后应自动登录进首页(page):
+        phone = f&quot;137{int(time.time()) % 100000000:08d}&quot;
+        page.goto(BASE + &quot;/&quot;)
+        page.get_by_role(&quot;link&quot;, name=&quot;注册&quot;).click()  # ① 点注册
+        page.locator(&#x27;input[name=&quot;phone&quot;]&#x27;).fill(phone)  # ② 填手机号
+        page.locator(&#x27;input[name=&quot;password&quot;]&#x27;).fill(&quot;Abcd1234&quot;)  # ③ 两次密码
+        page.locator(&#x27;input[name=&quot;password2&quot;]&#x27;).fill(&quot;Abcd1234&quot;)
+        page.get_by_role(&quot;button&quot;, name=&quot;注册&quot;).click()  # ④ 提交
+&gt;       assert page.url == BASE + &quot;/&quot;  # 现在这条会 FAILED = BUG3 铁证
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: assert &#x27;http://127.0.0.1:5001/login&#x27; == &#x27;http://127.0.0.1:5001/&#x27;
+E         
+E         #x1B[0m#x1B[91m- http://127.0.0.1:5001/#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+E         #x1B[92m+ http://127.0.0.1:5001/login#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+E         ?                       +++++#x1B[90m#x1B[39;49;00m
+
+UI_test.py:21: AssertionError</pre></details></td></tr><tr><td>test_data_driven::test_登录场景_数据驱动[正确密码]</td><td style="color:#0a7d28;font-weight:bold">通过</td><td>0.87s</td><td></td></tr><tr><td>test_data_driven::test_登录场景_数据驱动[错误密码]</td><td style="color:#0a7d28;font-weight:bold">通过</td><td>0.84s</td><td></td></tr><tr><td>test_data_driven::test_登录场景_数据驱动[空密码]</td><td style="color:#0a7d28;font-weight:bold">通过</td><td>0.85s</td><td></td></tr><tr><td>test_login_po::test_登录成功后应进入首页</td><td style="color:#0a7d28;font-weight:bold">通过</td><td>0.86s</td><td></td></tr><tr><td>test_login_po::test_密码错误应有提示</td><td style="color:#0a7d28;font-weight:bold">通过</td><td>0.93s</td><td></td></tr><tr><td>test_smoke::test_冒烟_主链路_注册登录加购下单</td><td style="color:#0a7d28;font-weight:bold">通过</td><td>1.09s</td><td></td></tr><tr><td>test_smoke::test_冒烟_未登录加购应被拦截</td><td style="color:#0a7d28;font-weight:bold">通过</td><td>0.76s</td><td></td></tr><tr><td>test_smoke::test_冒烟_首页可访问</td><td style="color:#0a7d28;font-weight:bold">通过</td><td>0.65s</td><td></td></tr><tr><td>test_smoke::test_冒烟_首页至少有3个商品</td><td style="color:#0a7d28;font-weight:bold">通过</td><td>0.67s</td><td></td></tr>
+</table>
+</body>
+</html>
