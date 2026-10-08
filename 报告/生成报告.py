@@ -18,8 +18,16 @@ def decode_unicode_escapes(text):
     """
     return re.sub(r"\\u([0-9a-fA-F]{4})", lambda m: chr(int(m.group(1), 16)), text)
 
-XML_PATH = Path("报告/junit.xml")               # pytest 产出的原始结果文件
-OUT_PATH = Path("报告/测试报告.html")            # 我们要生成的 HTML 报告
+import argparse                                  # 标准库：解析命令行参数（让脚本能指定输入/输出）
+
+# 命令行参数：不传就用默认值（向后兼容原来的用法）
+parser = argparse.ArgumentParser(description="把 pytest 的 junit.xml 转成 HTML 测试报告")
+parser.add_argument("--src", default="报告/junit.xml", help="junit.xml 路径（默认 报告/junit.xml）")
+parser.add_argument("--out", default="报告/测试报告.html", help="输出 HTML 路径（默认 报告/测试报告.html）")
+args = parser.parse_args()
+
+XML_PATH = Path(args.src)                       # pytest 产出的原始结果文件
+OUT_PATH = Path(args.out)                       # 我们要生成的 HTML 报告
 
 # ---------- ① 解析 junit.xml ----------
 root = ET.parse(XML_PATH).getroot()             # 得到 <testsuites> 节点

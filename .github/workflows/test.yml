@@ -1,0 +1,22 @@
+name: 自动化测试                              # CI 流程的名字
+on: [push, pull_request]                     # 何时触发：推送或提 PR 时
+jobs:
+  test:                                      # 一个任务
+    runs-on: ubuntu-latest                   # 在 GitHub 的云机器（Ubuntu）上跑
+    steps:
+      - uses: actions/checkout@v4             # ① 把仓库代码拉下来
+      - uses: actions/setup-python@v5         # ② 装 Python
+        with:
+          python-version: '3.11'
+      - run: pip install pytest requests playwright   # ③ 装依赖
+      - run: python -m playwright install --with-deps chromium
+      - name: 启动被测系统并跑冒烟测试          # ④ 启动被测系统 → 跑测试
+        run: |
+          cd 被测系统/mini_mall && python app.py &
+          sleep 3
+          cd "$GITHUB_WORKSPACE" && python -m pytest -m smoke -v
+      - uses: actions/upload-artifact@v4      # ⑤ 把测试报告传上去（可下载）
+        if: always()
+        with:
+          name: 测试报告
+          path: 报告/
