@@ -4,7 +4,11 @@ __pycache__/
 .pytest_cache/
 
 # 测试原始产物（每次跑都变，不进仓库；报告 HTML 作为样例保留）
-报告/junit.xml
+报告/junit*.xml
+
+# 被测系统的本地数据库（每次启动会自动重建，不进仓库）
+system_under_test/mini_mall/mall.db
+*.db
 
 # 编辑器配置
 .idea/

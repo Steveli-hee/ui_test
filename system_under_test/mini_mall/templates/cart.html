@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}购物车 · 迷你商城{% endblock %}
+{% block body %}
+<h2>我的购物车</h2>
+{% if rows %}
+<table>
+  <tr><th>商品</th><th>单价</th><th>数量</th><th>小计</th><th>操作</th></tr>
+  {% for r in rows %}
+  <tr>
+    <td>{{ r['name'] }}</td>
+    <td>￥{{ '%.2f'|format(r['price']) }}</td>
+    <td>
+      <form method="post" action="{{ url_for('cart_update') }}" style="display:flex;gap:6px">
+        <input type="hidden" name="cart_id" value="{{ r['id'] }}">
+        <input type="number" name="qty" value="{{ r['qty'] }}" min="0" style="width:70px">
+        <button class="btn" type="submit">修改</button>
+      </form>
+    </td>
+    <td>￥{{ '%.2f'|format(r['subtotal']) }}</td>
+    <td>
+      <form method="post" action="{{ url_for('cart_remove') }}">
+        <input type="hidden" name="cart_id" value="{{ r['id'] }}">
+        <button type="submit" style="background:none;border:none;color:#b91c1c;cursor:pointer">删除</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+  <tr><td colspan="3" style="text-align:right"><b>应付总额</b></td><td colspan="2"><b>￥{{ '%.2f'|format(total) }}</b></td></tr>
+</table>
+<form method="post" action="{{ url_for('checkout') }}" style="margin-top:10px">
+  <button class="btn" type="submit">去结算</button>
+</form>
+{% else %}
+<p>购物车是空的，去 <a href="{{ url_for('index') }}">逛逛商品</a></p>
+{% endif %}
+{% endblock %}

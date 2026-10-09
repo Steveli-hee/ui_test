@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}下单成功 · 迷你商城{% endblock %}
+{% block body %}
+<h2>✅ 下单成功</h2>
+<p>共 {{ count }} 件商品，应付金额：<b>￥{{ '%.2f'|format(total) }}</b></p>
+<p><a href="{{ url_for('index') }}">继续购物</a></p>
+{% endblock %}

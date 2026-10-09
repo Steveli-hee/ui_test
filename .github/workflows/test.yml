@@ -1,21 +1,42 @@
-name: 自动化测试                              # CI 流程的名字
-on: [push, pull_request]                     # 何时触发：推送或提 PR 时
+name: 自动化测试
+
+# 何时触发：推送代码或提交 PR 时，GitHub 自动跑一遍测试
+on: [push, pull_request]
+
 jobs:
-  test:                                      # 一个任务
-    runs-on: ubuntu-latest                   # 在 GitHub 的云机器（Ubuntu）上跑
+  test:
+    runs-on: ubuntu-latest          # 在 GitHub 提供的云机器（Ubuntu）上跑
+
     steps:
-      - uses: actions/checkout@v4             # ① 把仓库代码拉下来
-      - uses: actions/setup-python@v5         # ② 装 Python
+      - uses: actions/checkout@v4   # ① 把仓库代码拉到云机器
+
+      - uses: actions/setup-python@v5   # ② 安装 Python
         with:
           python-version: '3.11'
-      - run: pip install pytest requests playwright   # ③ 装依赖
-      - run: python -m playwright install --with-deps chromium
-      - name: 启动被测系统并跑冒烟测试          # ④ 启动被测系统 → 跑测试
+
+      # ③ 安装依赖（★ 必须把被测系统需要的 flask 也装上有，否则起不来）
+      - name: 安装依赖
         run: |
-          cd 被测系统/mini_mall && python app.py &
-          sleep 3
-          cd "$GITHUB_WORKSPACE" && python -m pytest -m smoke -v
-      - uses: actions/upload-artifact@v4      # ⑤ 把测试报告传上去（可下载）
+          python -m pip install --upgrade pip
+          pip install pytest requests playwright flask
+
+      - name: 安装 Playwright 浏览器
+        run: python -m playwright install --with-deps chromium
+
+      # ④ 启动被测系统（后台）→ 等它就绪 → 跑冒烟测试
+      #    ★ 前提：仓库里必须有被测系统源码（system_under_test/mini_mall）—— 这就是"仓库自包含"
+      - name: 启动被测系统并跑冒烟测试
+        run: |
+          cd system_under_test/mini_mall
+          python app.py &
+          sleep 5
+          curl -s -o /dev/null -w "被测系统状态码: %{http_code}\n" http://127.0.0.1:5001/
+          cd "$GITHUB_WORKSPACE"
+          python -m pytest -m smoke -v --junitxml=报告/junit_ci.xml
+
+      # ⑤ 无论成功失败，都把测试报告作为产物上传（可下载查看）
+      - name: 上传测试报告
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: 测试报告

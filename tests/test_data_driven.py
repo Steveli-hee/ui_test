@@ -10,6 +10,8 @@ from utils import new_phone                     # 唯一手机号工具
 # 读取数据文件（encoding 必须写，否则中文在 Windows 上可能乱码）
 CASES = json.loads(Path("data/login_cases.json").read_text(encoding="utf-8"))
 PHONE = new_phone()          # 本文件共用一个账号（模块级只生成一次）
+
+@pytest.mark.regression
 @pytest.mark.parametrize("case", CASES, ids=[c["场景"] for c in CASES])   # ids → 用例名显示场景名
 def test_登录场景_数据驱动(page, case):
     """一条用例逻辑 × 3 组数据 → 3 条用例（数据来自 JSON）"""

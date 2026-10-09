@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}商品列表 · 迷你商城{% endblock %}
+{% block body %}
+<h2>全部商品</h2>
+{% for it in items %}
+<div class="card">
+  <b>{{ it['name'] }}</b> ￥{{ '%.2f'|format(it['price']) }}
+  <span style="color:#888">（库存 {{ it['stock'] }}）</span>
+  <p style="color:#666;margin:4px 0">{{ it['descr'] }}</p>
+  <form method="post" action="{{ url_for('cart_add') }}">
+    <input type="hidden" name="product_id" value="{{ it['id'] }}">
+    <button class="btn" type="submit">加入购物车</button>
+  </form>
+</div>
+{% endfor %}
+{% endblock %}

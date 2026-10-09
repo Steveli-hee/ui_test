@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}登录 · 迷你商城{% endblock %}
+{% block body %}
+<h2>用户登录</h2>
+<form method="post" action="{{ url_for('login') }}">
+  <div><label>手机号</label><input name="phone"></div>
+  <div><label>密码</label><input type="password" name="password"></div>
+  <button class="btn" type="submit">登录</button>
+</form>
+{% endblock %}

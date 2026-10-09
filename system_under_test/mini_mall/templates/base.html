@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>{% block title %}迷你商城{% endblock %}</title>
+<style>
+  body { font-family: "Microsoft YaHei", sans-serif; max-width: 860px; margin: 0 auto; padding: 16px; color: #222; }
+  header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; padding-bottom: 8px; }
+  h1 { font-size: 20px; } a { color: #1a56db; text-decoration: none; margin-left: 10px; }
+  .flash { background: #fff3cd; border: 1px solid #ffc107; padding: 8px 12px; border-radius: 6px; margin: 10px 0; }
+  .card { border: 1px solid #ddd; border-radius: 8px; padding: 12px; margin: 10px 0; }
+  .btn { background: #1a56db; color: #fff; border: 0; padding: 6px 14px; border-radius: 6px; cursor: pointer; }
+  input, select { padding: 6px; border: 1px solid #ccc; border-radius: 6px; margin: 4px 0; }
+  label { display: inline-block; width: 130px; }
+  table { border-collapse: collapse; width: 100%; }
+  td, th { border: 1px solid #ddd; padding: 6px 10px; text-align: left; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🛒 迷你商城 <small style="color:#888">(测试靶场)</small></h1>
+  <div>
+    {% if user %}
+      你好，{{ user['phone'] }} <a href="{{ url_for('logout') }}">退出</a>
+    {% else %}
+      <a href="{{ url_for('login') }}">登录</a>
+      <a href="{{ url_for('register') }}">注册</a>
+    {% endif %}
+    <a href="{{ url_for('cart') }}">购物车</a>
+  </div>
+</header>
+{% with msgs = get_flashed_messages() %}
+  {% if msgs %}<div class="flash">{{ msgs[0] }}</div>{% endif %}
+{% endwith %}
+{% block body %}{% endblock %}
+</body>
+</html>
